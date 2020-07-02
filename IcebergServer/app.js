@@ -1,20 +1,24 @@
-const express = require('express')
+const express = require('express');
 
-const config = require('./config/config')
+const config = require('./config');
+const { winston } = require('winston');
+const { Container } = require('typedi');
 
 async function startServer() {
   const app = express();
 
   await require('./loaders')(app);
 
+  const logger = Container.get('logger');
+
   app.listen(config.port, (err) => {
     if (err) {
-      console.log('Error trying to listen on port ' + config.port.toString());
+      logger.error('We have an issue, server did not launch successfully');
       return;
     }
 
-    console.log(`Started listening on port ${config.port}`);
-  })
+    logger.info(`Started listening on port ${config.port}`);
+  });
 }
 
 startServer();
