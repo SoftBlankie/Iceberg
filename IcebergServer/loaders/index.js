@@ -12,7 +12,7 @@ module.exports = async (expressApp) => {
     model: require('../models/user'),
   };
 
-  typediLoader([userModel]);
+  await typediLoader([userModel]);
   winstonLoader.info('Finished injecting dependencies');
 
   await expressLoader(expressApp);
