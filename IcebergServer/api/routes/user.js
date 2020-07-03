@@ -1,14 +1,17 @@
 const express = require('express');
 const { celebrate, Joi } = require('celebrate');
 const router = express.Router();
-const winston = require('winston');
 const { Container } = require('typedi');
+const { Logger } = require('mongodb');
+const auth = require('../middleware/auth');
+const passport = require('passport');
+
 module.exports = () => {
   router.get('/status', (req, res) => {
     res.status(200).end();
   });
 
-  signupSchema = {
+  var signupSchema = {
     body: {
       username: Joi.string().min(3).max(16).required(),
       email: Joi.string()
@@ -18,17 +21,76 @@ module.exports = () => {
     },
   };
 
-  router.post('/signup', celebrate(signupSchema), async (req, res) => {
+  router.post('/signup', auth.optional, celebrate(signupSchema), (req, res) => {
+    const logger = Container.get('logger');
+
     const authService = Container.get('authService');
-    authService.signupUser(req.body);
-    res.send({ msg: 'moo?' });
+    authService.signupUser(req.body, (newUser, err) => {
+      if (!err) {
+        logger.info(`Successfully signed up the new user ${newUser.username}`);
+        return res.send({
+          msg: 'Successfully created new user!',
+          newUser: newUser,
+        });
+      } else {
+        logger.info(
+          `Did not successfully sign up the new user ${newUser.username}`
+        );
+        return res.send({
+          msg: 'Did not successfully create new user.',
+        });
+      }
+    });
+  });
+
+  var loginSchema = {
+    body: {
+      username: Joi.string().min(3).max(16).required(),
+      password: Joi.string().min(6).max(100).required(),
+    },
+  };
+
+  router.post(
+    '/login',
+    auth.optional,
+    celebrate(loginSchema),
+    (req, res, next) => {
+      const logger = Container.get('logger');
+      logger.info(`Trying to authenticate the user ${req.body.username}`);
+      const authService = Container.get('authService');
+      return passport.authenticate('local', (err, passportUser, info) => {
+        if (err) {
+          return next(err);
+        }
+        if (passportUser) {
+          const user = passportUser;
+          const token = authService.generateJWTToken(user);
+          return res.json({ user: user.username, token: token });
+        }
+
+        return res.status(400).info;
+      })(req, res, next);
+    }
+  );
+
+  router.get('/user', auth.required, (req, res) => {
+    res.send('lmao you did it');
   });
 
   router.use((error, req, res, next) => {
+    const logger = Container.get('logger');
+
+    logger.error(error);
     // joi error
     if (error.joi) {
       // return code 400 (bad request)
       return res.status(400).json({ error: error.joi.message });
+    }
+
+    if (error.status == 401) {
+      return res
+        .status(401)
+        .json({ error: 'Unauthorized, who do you think you are punk!?' });
     }
 
     // return code 500 (internal server error)
