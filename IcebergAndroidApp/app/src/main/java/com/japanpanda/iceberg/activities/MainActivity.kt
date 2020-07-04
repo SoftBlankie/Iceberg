@@ -1,13 +1,10 @@
-package com.japanpanda.iceberg
+package com.japanpanda.iceberg.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.findNavController
+import androidx.appcompat.app.AppCompatActivity
+import com.japanpanda.iceberg.R
 
 class MainActivity : AppCompatActivity() {
-
-    private var isLoggedIn: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

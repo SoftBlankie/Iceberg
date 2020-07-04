@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/authFragment"
-        android:name="com.japanpanda.iceberg.AuthFragment"
+        android:name="com.japanpanda.iceberg.fragments.AuthFragment"
         android:label="fragment_auth"
-        tools:layout="@layout/fragment_auth" >
+        tools:layout="@layout/fragment_auth">
         <action
             android:id="@+id/action_authFragment_to_signupFragment"
             app:destination="@id/signupFragment"
@@ -27,9 +27,9 @@
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.japanpanda.iceberg.SplashFragment"
+        android:name="com.japanpanda.iceberg.fragments.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_authFragment"
             app:destination="@id/authFragment" />
@@ -39,17 +39,17 @@
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.japanpanda.iceberg.MainFragment"
+        android:name="com.japanpanda.iceberg.fragments.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" />
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.japanpanda.iceberg.SignupFragment"
+        android:name="com.japanpanda.iceberg.fragments.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" />
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.japanpanda.iceberg.LoginFragment"
+        android:name="com.japanpanda.iceberg.fragments.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
 </navigation>

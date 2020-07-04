@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".SignupFragment">
+    tools:context=".fragments.SignupFragment">
 
 
     <ScrollView
@@ -25,9 +24,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="30sp"
                 android:layout_marginLeft="30sp"
                 android:layout_marginTop="15sp"
+                android:layout_marginRight="30sp"
                 android:background="@color/white"
                 android:orientation="vertical">
 
@@ -38,8 +37,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="@string/username_hint"
-                    android:inputType="textPersonName"
-                   />
+                    android:inputType="textPersonName" />
 
                 <EditText
                     android:id="@+id/emailEntry"
@@ -69,7 +67,7 @@
                     android:inputType="textPassword" />
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/signup_button"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="180sp"
                     android:layout_height="wrap_content"
