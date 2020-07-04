@@ -11,7 +11,7 @@ Meet new people by discussing interesting questions and hit them up with private
 ## Android App
 
 - Kotlin
-- Volley
+- Retrofit
 
 ## Backend Server
 
@@ -24,23 +24,25 @@ Meet new people by discussing interesting questions and hit them up with private
 ## Icebox
 
 - [ ] Implement the basis of messaging (message mongodb schema)
+- [ ] Android app progress halted for now (flush out web app for universal access first)
 
 ## Up next
 
-- [ ] Connect the server to the app using volley
+- [ ] Start working on web app
 
 ## In progress
 
-- [ ] Implement authorization for Android App
-- [ ] Login Form + Logic
-- [ ] Signup Form + Logic
 - [ ] Implement model for user profile (nickname, first name, bio, etc)
 
 ## Finished
 
 - [x] Initialize the backend server
 - [x] Initialize database
-- [x] Initialize Routes
+- [x] Initialize routes
+- [x] Implement authentication with json-web-tokens and passport
+- [x] Login Form + Logic (Basic)
+- [x] Signup Form + Logic (Basic)
+- [x] Implement authorization for Android App via retrofit requests
 
 # Want to Contribute?
 
