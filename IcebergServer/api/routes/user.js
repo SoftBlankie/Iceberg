@@ -21,7 +21,7 @@ module.exports = () => {
     },
   };
 
-  router.post('/signup', auth.optional, celebrate(signupSchema), (req, res) => {
+  router.post('/signup', auth.optional, (req, res) => {
     const logger = Container.get('logger');
 
     const authService = Container.get('authService');
@@ -29,15 +29,19 @@ module.exports = () => {
       if (!err) {
         logger.info(`Successfully signed up the new user ${newUser.username}`);
         return res.send({
+          status: 200,
           msg: 'Successfully created new user!',
-          newUser: newUser,
+          username: newUser.username,
+          error: 'No error',
         });
       } else {
         logger.info(
           `Did not successfully sign up the new user ${newUser.username}`
         );
         return res.send({
+          status: 200,
           msg: 'Did not successfully create new user.',
+          error: err,
         });
       }
     });
@@ -65,7 +69,14 @@ module.exports = () => {
         if (passportUser) {
           const user = passportUser;
           const token = authService.generateJWTToken(user);
-          return res.json({ user: user.username, token: token });
+
+          return res.json({
+            status: 200,
+            msg: 'Successfully logged in!',
+            username: user.username,
+            error: 'No error',
+            token: token,
+          });
         }
 
         return res.status(400).info;
