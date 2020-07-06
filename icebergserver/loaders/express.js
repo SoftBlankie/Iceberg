@@ -7,11 +7,12 @@ const { Container } = require('typedi');
 const passport = require('passport');
 const passportLoader = require('./passport');
 const session = require('express-session');
+const cors = require('cors');
 
 module.exports = async (app) => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-
+  app.use(cors());
   // initialize passport
   app.use(
     session({
