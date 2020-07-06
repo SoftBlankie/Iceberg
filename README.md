@@ -23,16 +23,17 @@ Meet new people by discussing interesting questions and hit them up with private
 
 ## Icebox
 
-- [ ] Implement the basis of messaging (message mongodb schema)
 - [ ] Android app progress halted for now (flush out web app for universal access first)
 
 ## Up next
 
-- [ ] Start working on web app
+- [ ] Implement the basis of messaging (message mongodb schema)
 
 ## In progress
 
 - [ ] Implement model for user profile (nickname, first name, bio, etc)
+- [ ] (Webapp) Implement the sign up form and login form
+- [ ] (Webapp) Implement the authentication service
 
 ## Finished
 
