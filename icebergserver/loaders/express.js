@@ -8,6 +8,7 @@ const passport = require('passport');
 const passportLoader = require('./passport');
 const session = require('express-session');
 const cors = require('cors');
+const path = require('path');
 
 module.exports = async (app) => {
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -48,6 +49,14 @@ module.exports = async (app) => {
       });
     });
   }
+
+  app.use(express.static(path.join(__dirname, '../../../icebergwebapp/build')));
+
+  app.get('/*', (req, res) => {
+    res.sendFile(
+      path.join(__dirname + '../../../icebergwebapp/build/index.html')
+    );
+  });
 
   app.get('/status', (req, res) => {
     res.status(200).end();
