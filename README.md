@@ -8,10 +8,16 @@ Meet new people by discussing interesting questions and hit them up with private
 
 # Technology Used
 
-## Android App
+## Android App (On hiatus)
 
 - Kotlin
 - Retrofit
+
+## Web App
+
+- React
+- React Redux
+- Material UI
 
 ## Backend Server
 
