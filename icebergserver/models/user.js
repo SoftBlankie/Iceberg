@@ -4,7 +4,14 @@ const User = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: [true, 'Please enter a full name'],
+      required: true,
+      index: true,
+      unique: true,
+    },
+
+    lowerUsername: {
+      type: String,
+      required: true,
       index: true,
       unique: true,
     },

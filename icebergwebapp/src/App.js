@@ -2,20 +2,22 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, withRouter } from 'react-router-dom';
 import './App.css';
-import LoginForm from './components/loginForm/loginForm';
-import MainLayout from './components/mainLayout/mainLayout';
-import SignupForm from './components/signupForm/signupForm';
+import Dashboard from './components/dashboard';
+import LoginForm from './components/loginForm';
+import NavBar from './components/navBar';
+import SignupForm from './components/signupForm';
 
 const mapStateToProps = (state) => ({
-  mapstate: state.mapstate,
+  isLoggedIn: state.isLoggedIn,
 });
 
 function App() {
   return (
     <div id="App">
-      <MainLayout />
+      <NavBar />
       <Route path="/signup" component={SignupForm} />
       <Route path="/login" component={LoginForm} />
+      <Route path="/dashboard" component={Dashboard} />
     </div>
   );
 }

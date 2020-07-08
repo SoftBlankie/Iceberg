@@ -2,7 +2,7 @@ import { ThemeProvider } from '@material-ui/core';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
-import Root from './components/Root';
+import Root from './components/root';
 import './index.css';
 import rootReducer from './reducers';
 import * as serviceWorker from './serviceWorker';
@@ -14,11 +14,9 @@ const store = createStore(
 );
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <Root store={store} />
-    </ThemeProvider>
-  </React.StrictMode>,
+  <ThemeProvider theme={theme}>
+    <Root store={store} />
+  </ThemeProvider>,
   document.getElementById('root')
 );
 
