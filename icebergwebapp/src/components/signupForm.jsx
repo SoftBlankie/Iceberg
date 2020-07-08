@@ -7,15 +7,16 @@ import {
   Grid,
   TextField,
   Typography,
+  Snackbar,
 } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab/';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
 import { withStyles } from '@material-ui/styles';
-import classNames from 'classnames';
 import React, { Component } from 'react';
 import * as Yup from 'yup';
-import signupImage from '../../media/signupbg.jpg';
-import { signupUser } from '../../services/authService.js';
+import { signupUser } from '../services/authService.js';
 import Filter from 'bad-words';
+import { Link } from 'react-router-dom';
 
 const styles = (theme) => ({
   root: {
@@ -44,22 +45,15 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    // backgroundColor: '#FFFFFF',
     borderWidth: '3px',
     marginLeft: theme.spacing(36),
     marginRight: theme.spacing(36),
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
-  image: {
-    backgroundImage: 'url(' + signupImage + ')',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'light'
-        ? theme.palette.grey[50]
-        : theme.palette.grey[900],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
+  rightAlign: {
+    float: 'right',
   },
 });
 
@@ -77,11 +71,16 @@ class SignupForm extends Component {
       emailError: '',
       passwordError: '',
       confirmPasswordError: '',
+      usernameTouched: false,
+      emailTouched: false,
+      passwordTouched: false,
+      confirmPasswordTouched: false,
+      openAlert: false,
     };
     this.filter = new Filter();
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
     let newUser = {
       username: this.state.usernameValue,
@@ -89,12 +88,23 @@ class SignupForm extends Component {
       password: this.state.passwordValue,
     };
     if (
+      this.state.usernameTouched === true &&
+      this.state.emailTouched === true &&
+      this.state.passwordTouched === true &&
+      this.state.confirmPasswordTouched === true &&
       this.state.usernameError === '' &&
       this.state.emailError === '' &&
       this.state.passwordError === '' &&
       this.state.confirmPasswordError === ''
     ) {
-      signupUser(newUser);
+      let success = await signupUser(newUser);
+      console.log(success);
+      if (success) {
+        let state = this.state;
+        state.openAlert = true;
+        this.setState(state);
+        console.log(state);
+      }
     }
   }
 
@@ -112,6 +122,9 @@ class SignupForm extends Component {
         break;
       case 'confirmPassword':
         state.confirmPasswordValue = event.target.value;
+        if (event.target.value === this.state.passwordValue) {
+          state.confirmPasswordTouched = true;
+        }
         break;
       default:
         break;
@@ -124,6 +137,7 @@ class SignupForm extends Component {
     let state = this.state;
     switch (valueName) {
       case 'username':
+        state.usernameTouched = true;
         Yup.string()
           .min(3, 'Username must be 3 characters or more!')
           .max(15, 'Username must be 15 characters or less!')
@@ -143,6 +157,7 @@ class SignupForm extends Component {
 
         break;
       case 'email':
+        state.emailTouched = true;
         Yup.string()
           .email('Must be a valid email!')
           .required('Email is required!')
@@ -157,6 +172,7 @@ class SignupForm extends Component {
           });
         break;
       case 'password':
+        state.passwordTouched = true;
         Yup.string()
           .min(6, 'Password must be 6 characters or more!')
           .max(100, 'Password must be 100 characters or less!')
@@ -172,6 +188,7 @@ class SignupForm extends Component {
           });
         break;
       case 'confirmPassword':
+        state.confirmPasswordTouched = true;
         if (event.target.value !== this.state.passwordValue) {
           state.confirmPasswordError = 'Must match password!';
         } else {
@@ -184,10 +201,39 @@ class SignupForm extends Component {
     this.setState(state);
   }
 
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    let state = this.state;
+    state.openAlert = false;
+    this.setState(state);
+  };
+
   render() {
     const { classes } = this.props;
     return (
       <div>
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={this.state.openAlert}
+          autoHideDuration={60000}
+          onClose={this.handleClose}
+        >
+          <Alert onClose={this.handleClose} severity="success">
+            <AlertTitle>Successfully signed up user!</AlertTitle>
+            <Typography variant="body1">Welcome to the crew!</Typography>
+            <Typography
+              variant="body1"
+              align="center"
+              color="inherit"
+              component={Link}
+              to={'/login'}
+            >
+              Login
+            </Typography>
+          </Alert>
+        </Snackbar>
         <Container>
           <CssBaseline />
           <div className={classes.paper}>
@@ -215,7 +261,6 @@ class SignupForm extends Component {
                       onBlur={(e) => this.handleBlur(e, 'username')}
                       error={this.state.usernameError !== ''}
                       helperText={this.state.usernameError}
-                      autoFocus
                     />
                   </Grid>
 
@@ -239,10 +284,7 @@ class SignupForm extends Component {
                       fullWidth
                       color="secondary"
                       type="password"
-                      className="form-control"
                       value={this.state.passwordValue}
-                      placeholder="Password"
-                      id="password"
                       onChange={(e) => this.handleChange(e, 'password')}
                       onBlur={(e) => this.handleBlur(e, 'password')}
                       error={this.state.passwordError !== ''}
@@ -257,10 +299,7 @@ class SignupForm extends Component {
                       fullWidth
                       color="secondary"
                       type="password"
-                      className="form-control"
                       value={this.state.confirmPasswordValue}
-                      placeholder="Confirm password"
-                      id="confirmPassword"
                       onChange={(e) => this.handleChange(e, 'confirmPassword')}
                       onBlur={(e) => this.handleBlur(e, 'confirmPassword')}
                       error={this.state.confirmPasswordError !== ''}
@@ -275,12 +314,10 @@ class SignupForm extends Component {
                       variant="contained"
                       type="submit"
                       disabled={
-                        !(
-                          this.state.username === '' &&
-                          this.state.email === '' &&
-                          this.state.password === '' &&
-                          this.state.confirmPassword === ''
-                        ) ||
+                        this.state.usernameTouched === false ||
+                        this.state.emailTouched === false ||
+                        this.state.passwordTouched === false ||
+                        this.state.confirmPasswordTouched === false ||
                         !(
                           this.state.usernameError === '' &&
                           this.state.emailError === '' &&
@@ -290,8 +327,20 @@ class SignupForm extends Component {
                       }
                       className={classes.submit}
                     >
-                      Submit
+                      Sign Up
                     </Button>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Typography
+                      component={Link}
+                      to={'/login'}
+                      className={classes.rightAlign}
+                      color="inherit"
+                      variant="body2"
+                    >
+                      Already have an account?
+                    </Typography>
                   </Grid>
                 </Grid>
               </form>
