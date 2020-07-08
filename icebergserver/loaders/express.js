@@ -9,11 +9,16 @@ const passportLoader = require('./passport');
 const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 module.exports = async (app) => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
-  app.use(cors());
+  app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+
+  // for parsing cookies
+  app.use(cookieParser());
+
   // initialize passport
   app.use(
     session({

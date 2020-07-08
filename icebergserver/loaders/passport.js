@@ -11,7 +11,7 @@ module.exports = (passport) => {
   passport.use(
     new LocalStrategy((username, password, done) => {
       userModel
-        .findOne({ username })
+        .findOne({ lowerUsername: username.toLowerCase() })
         .then((user) => {
           if (user) {
             bcrypt.compare(password, user.password).then((res) => {

@@ -5,6 +5,7 @@ const { Container } = require('typedi');
 const { Logger } = require('mongodb');
 const auth = require('../middleware/auth');
 const passport = require('passport');
+const { json } = require('body-parser');
 
 module.exports = () => {
   router.get('/status', (req, res) => {
@@ -32,7 +33,7 @@ module.exports = () => {
           status: 200,
           msg: 'Successfully created new user!',
           username: newUser.username,
-          error: 'No error',
+          error: '',
         });
       } else {
         logger.info(
@@ -40,8 +41,7 @@ module.exports = () => {
         );
         return res.send({
           status: 200,
-          msg: 'Did not successfully create new user.',
-          error: err,
+          error: 'Did not successfully create new user.',
         });
       }
     });
@@ -49,8 +49,9 @@ module.exports = () => {
 
   var loginSchema = {
     body: {
-      username: Joi.string().min(3).max(16).required(),
-      password: Joi.string().min(6).max(100).required(),
+      username: Joi.string().required(),
+      password: Joi.string().required(),
+      expire: Joi.bool().required(),
     },
   };
 
@@ -68,21 +69,33 @@ module.exports = () => {
         }
         if (passportUser) {
           const user = passportUser;
-          const token = authService.generateJWTToken(user);
-
+          const token = authService.generateJWTToken(user, req.body.expire);
+          res.cookie('token', token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+          });
           return res.json({
             status: 200,
             msg: 'Successfully logged in!',
             username: user.username,
-            error: 'No error',
+            error: '',
             token: token,
           });
         }
 
-        return res.status(400).info;
+        return res.json({
+          status: 200,
+          error: 'Incorrect credentials!',
+        });
       })(req, res, next);
     }
   );
+
+  router.get('/logout', auth.optional, (req, res) => {
+    res.clearCookie('token', { path: '/', domain: 'localhost' });
+    res.status(200).end();
+  });
 
   router.get('/user', auth.required, (req, res) => {
     res.send('lmao you did it');
