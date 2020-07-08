@@ -10,24 +10,37 @@ module.exports = class authService {
     this.logger = logger;
   }
 
-  generateJWTToken(user) {
+  generateJWTToken(user, expire) {
     const today = new Date();
     const exp = new Date(today);
-    exp.setDate(today.getDate() + 60);
-    return jwt.sign(
-      {
-        _id: user._id, // We are gonna use this in the middleware 'isAuth'
-        username: user.username,
-        exp: exp.getTime() / 1000,
-      },
-      config.jwtSecret
-    );
+    let expireString = '';
+    if (expire) {
+      exp.setDate(today.getDate() + 1);
+    } else {
+      exp.setDate(today.getDate() + 365);
+    }
+    try {
+      const token = jwt.sign(
+        {
+          _id: user._id, // We are gonna use this in the middleware 'isAuth'
+          username: user.username,
+        },
+        config.jwtSecret,
+        { expiresIn: exp.getTime() }
+      );
+      return token;
+    } catch (e) {
+      console.log(e);
+    }
+    return null;
   }
 
   signupUser(newUser, callback) {
     this.logger.info(
       `Signing up the user ${newUser.username} ${newUser.email}`
     );
+
+    newUser.lowerUsername = newUser.username.toLowerCase();
 
     bcrypt.hash(newUser.password, 12).then((hash) => {
       newUser.password = hash;
@@ -39,24 +52,6 @@ module.exports = class authService {
         }
         callback(newUser, err);
       });
-    });
-  }
-
-  authUser(authUser, callback) {
-    this.logger.info(`Trying to authenticate the user ${authUser.username}`);
-
-    this.userModel.findOne({ username }).then((user) => {
-      if (!user) {
-        bcrypt.compare(authUser.password, user.password).then((res) => {
-          if (!res) {
-            logger.info(
-              `Incorrect credentials for the user ${authUser.username}`
-            );
-          }
-        });
-      } else {
-        callback(jwt, err);
-      }
     });
   }
 };
