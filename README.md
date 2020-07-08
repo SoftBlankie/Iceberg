@@ -38,8 +38,7 @@ Meet new people by discussing interesting questions and hit them up with private
 ## In progress
 
 - [ ] Implement model for user profile (nickname, first name, bio, etc)
-- [ ] (Webapp) Implement the sign up form and login form
-- [ ] (Webapp) Implement the authentication service
+- [ ] (Webapp) Display profile and allow users to edit profile
 
 ## Finished
 
@@ -50,6 +49,8 @@ Meet new people by discussing interesting questions and hit them up with private
 - [x] Login Form + Logic (Basic)
 - [x] Signup Form + Logic (Basic)
 - [x] Implement authorization for Android App via retrofit requests
+- [x] (Webapp) Implement the sign up form and login form
+- [x] (Webapp) Implement the authentication service
 
 # Want to Contribute?
 
