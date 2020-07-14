@@ -39,6 +39,7 @@ Meet new people by discussing interesting questions and hit them up with private
 
 - [ ] Implement model for user profile (nickname, first name, bio, etc)
 - [ ] (Webapp) Display profile and allow users to edit profile
+- [ ] (Webapp) Upload profile picture
 
 ## Finished
 
