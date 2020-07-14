@@ -2,10 +2,9 @@ const express = require('express');
 const { celebrate, Joi } = require('celebrate');
 const router = express.Router();
 const { Container } = require('typedi');
-const { Logger } = require('mongodb');
 const auth = require('../middleware/auth');
 const passport = require('passport');
-const { json } = require('body-parser');
+const jwt = require('express-jwt');
 
 module.exports = () => {
   router.get('/status', (req, res) => {
@@ -30,7 +29,6 @@ module.exports = () => {
       if (!err) {
         logger.info(`Successfully signed up the new user ${newUser.username}`);
         return res.send({
-          status: 200,
           msg: 'Successfully created new user!',
           username: newUser.username,
           error: '',
@@ -40,7 +38,6 @@ module.exports = () => {
           `Did not successfully sign up the new user ${newUser.username}`
         );
         return res.send({
-          status: 200,
           error: 'Did not successfully create new user.',
         });
       }
@@ -72,11 +69,11 @@ module.exports = () => {
           const token = authService.generateJWTToken(user, req.body.expire);
           res.cookie('token', token, {
             httpOnly: true,
-            secure: true,
+            // TODO: for dev purposes only, leave as false to avoid https
+            secure: false,
             sameSite: 'none',
           });
           return res.json({
-            status: 200,
             msg: 'Successfully logged in!',
             username: user.username,
             error: '',
@@ -85,12 +82,25 @@ module.exports = () => {
         }
 
         return res.json({
-          status: 200,
           error: 'Incorrect credentials!',
         });
       })(req, res, next);
     }
   );
+
+  router.get('/validToken', auth.optional, (req, res) => {
+    if (!req.cookies.token) {
+      return res.json({
+        error: 'Token not found',
+      });
+    }
+
+    // jwt.decode()
+
+    return res.json({
+      error: '',
+    });
+  });
 
   router.get('/logout', auth.optional, (req, res) => {
     res.clearCookie('token', { path: '/', domain: 'localhost' });

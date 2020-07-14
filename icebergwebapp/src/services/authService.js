@@ -24,3 +24,16 @@ export const logoutUser = () => {
     withCredentials: true,
   });
 };
+
+export const checkToken = async () => {
+  return axios
+    .get('http://localhost:1337/api/user/validToken', {
+      withCredentials: true,
+    })
+    .then((res) => {
+      return res.data.error === '';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
