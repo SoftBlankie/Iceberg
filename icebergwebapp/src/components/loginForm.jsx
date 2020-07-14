@@ -10,6 +10,7 @@ import {
   FormControlLabel,
   Checkbox,
   Snackbar,
+  Toolbar,
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
@@ -50,8 +51,8 @@ const styles = (theme) => ({
     alignItems: 'center',
     // backgroundColor: '#FFFFFF',
     borderWidth: '3px',
-    marginLeft: theme.spacing(36),
-    marginRight: theme.spacing(36),
+    marginLeft: theme.spacing(48),
+    marginRight: theme.spacing(48),
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
@@ -128,12 +129,14 @@ class LoginForm extends Component {
 
   render() {
     const { classes } = this.props;
-    if (this.state.loggedIn) {
-      return <Redirect push to="/dashboard" />;
+
+    if (this.props.loggedIn) {
+      return <Redirect to="/" />;
     }
 
     return (
       <div>
+        <Toolbar />
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           open={this.state.openAlert}
@@ -144,90 +147,87 @@ class LoginForm extends Component {
             <Typography variant="body1">Incorrect credentials!</Typography>
           </Alert>
         </Snackbar>
-        <Container>
-          <CssBaseline />
-          <div className={classes.paper}>
-            <Box
-              boxShadow={20}
-              border={1}
-              borderColor="secondary.main"
-              borderRadius={16}
-              className={classes.formContainer}
-            >
-              <Avatar className={classes.avatar}>
-                <EmojiPeopleIcon className={classes.largeIcon} />
-              </Avatar>
-              <Typography variant="h5">Welcome back!</Typography>
-              <form className={classes.form} onSubmit={this.handleSubmit}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="filled"
-                      label="Username"
-                      fullWidth
-                      color="secondary"
-                      value={this.state.usernameValue}
-                      onChange={(e) => this.handleChange(e, 'username')}
-                      autoFocus
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="filled"
-                      label="Password"
-                      fullWidth
-                      color="secondary"
-                      type="password"
-                      value={this.state.passwordValue}
-                      onChange={(e) => this.handleChange(e, 'password')}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          onChange={(e) => this.handleChange(e, 'expire')}
-                          name="expire"
-                        />
-                      }
-                      label="Remember me (1 year)"
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Button
-                      fullWidth
-                      color="secondary"
-                      variant="contained"
-                      type="submit"
-                      disabled={
-                        this.state.usernameValue === '' ||
-                        this.state.passwordValue === ''
-                      }
-                      className={classes.submit}
-                    >
-                      Login
-                    </Button>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Typography
-                      component={Link}
-                      to={'/signup'}
-                      className={classes.rightAlign}
-                      color="inherit"
-                      variant="body2"
-                    >
-                      Don't have an account?
-                    </Typography>
-                  </Grid>
+        <div className={classes.paper}>
+          <Box
+            boxShadow={20}
+            border={1}
+            borderColor="secondary.main"
+            borderRadius={16}
+            className={classes.formContainer}
+          >
+            <Avatar className={classes.avatar}>
+              <EmojiPeopleIcon className={classes.largeIcon} />
+            </Avatar>
+            <Typography variant="h5">Welcome back!</Typography>
+            <form className={classes.form} onSubmit={this.handleSubmit}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="filled"
+                    label="Username"
+                    fullWidth
+                    color="secondary"
+                    value={this.state.usernameValue}
+                    onChange={(e) => this.handleChange(e, 'username')}
+                    autoFocus
+                  />
                 </Grid>
-              </form>
-            </Box>
-          </div>
-        </Container>
+
+                <Grid item xs={12}>
+                  <TextField
+                    variant="filled"
+                    label="Password"
+                    fullWidth
+                    color="secondary"
+                    type="password"
+                    value={this.state.passwordValue}
+                    onChange={(e) => this.handleChange(e, 'password')}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        onChange={(e) => this.handleChange(e, 'expire')}
+                        name="expire"
+                      />
+                    }
+                    label="Remember me (1 year)"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Button
+                    fullWidth
+                    color="secondary"
+                    variant="contained"
+                    type="submit"
+                    disabled={
+                      this.state.usernameValue === '' ||
+                      this.state.passwordValue === ''
+                    }
+                    className={classes.submit}
+                  >
+                    Login
+                  </Button>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography
+                    component={Link}
+                    to={'/signup'}
+                    className={classes.rightAlign}
+                    color="inherit"
+                    variant="body2"
+                  >
+                    Don't have an account?
+                  </Typography>
+                </Grid>
+              </Grid>
+            </form>
+          </Box>
+        </div>
       </div>
     );
   }

@@ -1,29 +1,15 @@
-import React, { Component } from 'react';
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Button,
-} from '@material-ui/core';
+import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { logout } from '../actions';
-import { logoutUser } from '../services/authService';
+import React, { Component } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 
 const styles = (theme) => ({
-  root: {
-    flexGrow: 1,
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
   },
   rightToolbar: {
     marginLeft: 'auto',
     marginRight: 16,
-  },
-  menuButton: {
-    marginRight: 16,
-    marginLeft: -12,
   },
   appName: {
     textTransform: 'none',
@@ -31,29 +17,30 @@ const styles = (theme) => ({
 });
 
 class NavBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { redirect: false };
+  }
+
   signOut = () => {
-    // update state
-    this.props.logout();
-    // clear httponly cookie
-    logoutUser();
+    if (typeof this.props.signOut === 'function') {
+      this.props.signOut();
+      this.setState({ redirect: true });
+    }
   };
 
   render() {
     const { classes } = this.props;
     let isLogged = this.props.loggedIn;
-    return (
-      <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              className={classes.menuButton}
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-            >
-              <MenuIcon />
-            </IconButton>
 
+    if (this.state.redirect) {
+      return <Redirect to="/" />;
+    }
+
+    return (
+      <div>
+        <AppBar className={classes.appBar} position="fixed">
+          <Toolbar>
             <Button
               component={Link}
               to={'/'}
@@ -96,17 +83,4 @@ class NavBar extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return { loggedIn: state.loggedIn };
-};
-
-const mapDispatchToProps = () => {
-  return {
-    logout,
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps()
-)(withStyles(styles)(NavBar));
+export default withStyles(styles)(NavBar);

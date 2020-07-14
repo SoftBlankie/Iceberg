@@ -4,9 +4,17 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.handleChange = this.handleChange.bind(this);
   }
+
+  handleChange(event, newValue) {
+    let state = this.state;
+    state.value = newValue;
+    this.setState(state);
+  }
+
   render() {
-    return <h1>dashboard</h1>;
+    return <div></div>;
   }
 }
 

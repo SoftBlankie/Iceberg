@@ -8,6 +8,7 @@ import {
   TextField,
   Typography,
   Snackbar,
+  Toolbar,
 } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab/';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
@@ -16,7 +17,7 @@ import React, { Component } from 'react';
 import * as Yup from 'yup';
 import { signupUser } from '../services/authService.js';
 import Filter from 'bad-words';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 const styles = (theme) => ({
   root: {
@@ -47,8 +48,8 @@ const styles = (theme) => ({
     alignItems: 'center',
     // backgroundColor: '#FFFFFF',
     borderWidth: '3px',
-    marginLeft: theme.spacing(36),
-    marginRight: theme.spacing(36),
+    marginLeft: theme.spacing(48),
+    marginRight: theme.spacing(48),
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
@@ -212,8 +213,12 @@ class SignupForm extends Component {
 
   render() {
     const { classes } = this.props;
+    if (this.props.loggedIn) {
+      return <Redirect to="/" />;
+    }
     return (
       <div>
+        <Toolbar />
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           open={this.state.openAlert}
@@ -234,119 +239,117 @@ class SignupForm extends Component {
             </Typography>
           </Alert>
         </Snackbar>
-        <Container>
-          <CssBaseline />
-          <div className={classes.paper}>
-            <Box
-              boxShadow={20}
-              border={1}
-              borderColor="secondary.main"
-              borderRadius={16}
-              className={classes.formContainer}
-            >
-              <Avatar className={classes.avatar}>
-                <SentimentVerySatisfiedIcon className={classes.largeIcon} />
-              </Avatar>
-              <Typography variant="h5">Join the crew!</Typography>
-              <form className={classes.form} onSubmit={this.handleSubmit}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="filled"
-                      label="Username"
-                      fullWidth
-                      color="secondary"
-                      value={this.state.usernameValue}
-                      onChange={(e) => this.handleChange(e, 'username')}
-                      onBlur={(e) => this.handleBlur(e, 'username')}
-                      error={this.state.usernameError !== ''}
-                      helperText={this.state.usernameError}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="filled"
-                      label="Email"
-                      fullWidth
-                      color="secondary"
-                      onChange={(e) => this.handleChange(e, 'email')}
-                      onBlur={(e) => this.handleBlur(e, 'email')}
-                      error={this.state.emailError !== ''}
-                      helperText={this.state.emailError}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="filled"
-                      label="Password"
-                      fullWidth
-                      color="secondary"
-                      type="password"
-                      value={this.state.passwordValue}
-                      onChange={(e) => this.handleChange(e, 'password')}
-                      onBlur={(e) => this.handleBlur(e, 'password')}
-                      error={this.state.passwordError !== ''}
-                      helperText={this.state.passwordError}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="filled"
-                      label="Confirm Password"
-                      fullWidth
-                      color="secondary"
-                      type="password"
-                      value={this.state.confirmPasswordValue}
-                      onChange={(e) => this.handleChange(e, 'confirmPassword')}
-                      onBlur={(e) => this.handleBlur(e, 'confirmPassword')}
-                      error={this.state.confirmPasswordError !== ''}
-                      helperText={this.state.confirmPasswordError}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Button
-                      fullWidth
-                      color="secondary"
-                      variant="contained"
-                      type="submit"
-                      disabled={
-                        this.state.usernameTouched === false ||
-                        this.state.emailTouched === false ||
-                        this.state.passwordTouched === false ||
-                        this.state.confirmPasswordTouched === false ||
-                        !(
-                          this.state.usernameError === '' &&
-                          this.state.emailError === '' &&
-                          this.state.passwordError === '' &&
-                          this.state.confirmPasswordError === ''
-                        )
-                      }
-                      className={classes.submit}
-                    >
-                      Sign Up
-                    </Button>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Typography
-                      component={Link}
-                      to={'/login'}
-                      className={classes.rightAlign}
-                      color="inherit"
-                      variant="body2"
-                    >
-                      Already have an account?
-                    </Typography>
-                  </Grid>
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Box
+            boxShadow={20}
+            border={1}
+            borderColor="secondary.main"
+            borderRadius={16}
+            className={classes.formContainer}
+          >
+            <Avatar className={classes.avatar}>
+              <SentimentVerySatisfiedIcon className={classes.largeIcon} />
+            </Avatar>
+            <Typography variant="h5">Join the crew!</Typography>
+            <form className={classes.form} onSubmit={this.handleSubmit}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="filled"
+                    label="Username"
+                    fullWidth
+                    color="secondary"
+                    value={this.state.usernameValue}
+                    onChange={(e) => this.handleChange(e, 'username')}
+                    onBlur={(e) => this.handleBlur(e, 'username')}
+                    error={this.state.usernameError !== ''}
+                    helperText={this.state.usernameError}
+                  />
                 </Grid>
-              </form>
-            </Box>
-          </div>
-        </Container>
+
+                <Grid item xs={12}>
+                  <TextField
+                    variant="filled"
+                    label="Email"
+                    fullWidth
+                    color="secondary"
+                    onChange={(e) => this.handleChange(e, 'email')}
+                    onBlur={(e) => this.handleBlur(e, 'email')}
+                    error={this.state.emailError !== ''}
+                    helperText={this.state.emailError}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    variant="filled"
+                    label="Password"
+                    fullWidth
+                    color="secondary"
+                    type="password"
+                    value={this.state.passwordValue}
+                    onChange={(e) => this.handleChange(e, 'password')}
+                    onBlur={(e) => this.handleBlur(e, 'password')}
+                    error={this.state.passwordError !== ''}
+                    helperText={this.state.passwordError}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    variant="filled"
+                    label="Confirm Password"
+                    fullWidth
+                    color="secondary"
+                    type="password"
+                    value={this.state.confirmPasswordValue}
+                    onChange={(e) => this.handleChange(e, 'confirmPassword')}
+                    onBlur={(e) => this.handleBlur(e, 'confirmPassword')}
+                    error={this.state.confirmPasswordError !== ''}
+                    helperText={this.state.confirmPasswordError}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Button
+                    fullWidth
+                    color="secondary"
+                    variant="contained"
+                    type="submit"
+                    disabled={
+                      this.state.usernameTouched === false ||
+                      this.state.emailTouched === false ||
+                      this.state.passwordTouched === false ||
+                      this.state.confirmPasswordTouched === false ||
+                      !(
+                        this.state.usernameError === '' &&
+                        this.state.emailError === '' &&
+                        this.state.passwordError === '' &&
+                        this.state.confirmPasswordError === ''
+                      )
+                    }
+                    className={classes.submit}
+                  >
+                    Sign Up
+                  </Button>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography
+                    component={Link}
+                    to={'/login'}
+                    className={classes.rightAlign}
+                    color="inherit"
+                    variant="body2"
+                  >
+                    Already have an account?
+                  </Typography>
+                </Grid>
+              </Grid>
+            </form>
+          </Box>
+        </div>
       </div>
     );
   }
