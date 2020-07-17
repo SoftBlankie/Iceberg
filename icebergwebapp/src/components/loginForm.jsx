@@ -2,29 +2,28 @@ import {
   Avatar,
   Box,
   Button,
-  Container,
-  CssBaseline,
-  Grid,
-  TextField,
-  Typography,
-  FormControlLabel,
   Checkbox,
+  FormControlLabel,
+  Grid,
   Snackbar,
+  TextField,
   Toolbar,
+  Typography,
 } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
+import { Alert } from '@material-ui/lab';
 import { withStyles } from '@material-ui/styles';
 import Filter from 'bad-words';
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { loginUser } from '../services/authService.js';
-import { login } from '../actions/index.js';
 import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import { login } from '../actions/index.js';
+import { loginUser } from '../services/authService.js';
 
 const styles = (theme) => ({
   root: {
-    height: '95vh',
+    alignSelf: 'center',
+    width: '40%',
   },
   paper: {
     paddingTop: theme.spacing(10),
@@ -51,8 +50,7 @@ const styles = (theme) => ({
     alignItems: 'center',
     // backgroundColor: '#FFFFFF',
     borderWidth: '3px',
-    marginLeft: theme.spacing(48),
-    marginRight: theme.spacing(48),
+    width: '100%',
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
@@ -135,7 +133,7 @@ class LoginForm extends Component {
     }
 
     return (
-      <div>
+      <div className={classes.root}>
         <Toolbar />
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

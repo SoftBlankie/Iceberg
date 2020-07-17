@@ -2,26 +2,25 @@ import {
   Avatar,
   Box,
   Button,
-  Container,
   CssBaseline,
   Grid,
-  TextField,
-  Typography,
   Snackbar,
+  TextField,
   Toolbar,
+  Typography,
 } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab/';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
+import { Alert, AlertTitle } from '@material-ui/lab/';
 import { withStyles } from '@material-ui/styles';
+import Filter from 'bad-words';
 import React, { Component } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import * as Yup from 'yup';
 import { signupUser } from '../services/authService.js';
-import Filter from 'bad-words';
-import { Link, Redirect } from 'react-router-dom';
 
 const styles = (theme) => ({
   root: {
-    height: '95vh',
+    width: '40%',
   },
   paper: {
     paddingTop: theme.spacing(10),
@@ -48,8 +47,6 @@ const styles = (theme) => ({
     alignItems: 'center',
     // backgroundColor: '#FFFFFF',
     borderWidth: '3px',
-    marginLeft: theme.spacing(48),
-    marginRight: theme.spacing(48),
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
@@ -217,7 +214,7 @@ class SignupForm extends Component {
       return <Redirect to="/" />;
     }
     return (
-      <div>
+      <div className={classes.root}>
         <Toolbar />
         <Snackbar
           anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

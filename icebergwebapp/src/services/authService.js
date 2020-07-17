@@ -25,7 +25,6 @@ export const logoutUser = () => {
       withCredentials: true,
     })
     .then(() => {
-      console.log('finished');
       return;
     });
 };

@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import MailIcon from '@material-ui/icons/Mail';
-import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import {
-  Drawer,
-  CssBaseline,
-  Toolbar,
-  List,
   Divider,
+  Drawer,
+  List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Toolbar,
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import MailIcon from '@material-ui/icons/Mail';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
