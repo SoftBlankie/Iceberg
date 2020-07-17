@@ -20,9 +20,14 @@ export const loginUser = async (user) => {
 };
 
 export const logoutUser = () => {
-  axios.get('http://localhost:1337/api/user/logout', {
-    withCredentials: true,
-  });
+  return axios
+    .get('http://localhost:1337/api/user/logout', {
+      withCredentials: true,
+    })
+    .then(() => {
+      console.log('finished');
+      return;
+    });
 };
 
 export const checkToken = async () => {

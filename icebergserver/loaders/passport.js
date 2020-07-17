@@ -21,6 +21,8 @@ module.exports = (passport) => {
                   error: { password: 'is invalid' },
                 });
               }
+              logger.info('Successfully authenticated user');
+              return done(null, user);
             });
           } else {
             logger.info(`Username ${username} is not found`);
@@ -28,8 +30,6 @@ module.exports = (passport) => {
               error: { username: 'is invalid' },
             });
           }
-          logger.info('Successfully authenticated user');
-          return done(null, user);
         })
         .catch(done);
     })
