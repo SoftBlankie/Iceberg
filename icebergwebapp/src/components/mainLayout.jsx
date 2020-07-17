@@ -1,27 +1,23 @@
-import React, { Component } from 'react';
-import AppDrawer from './drawer';
-import NavBar from './navBar';
-import { connect } from 'react-redux';
-import { logout, login } from '../actions';
-import { logoutUser } from '../services/authService';
-import {
-  Toolbar,
-  CircularProgress,
-  Fade,
-  CssBaseline,
-} from '@material-ui/core';
+import { CircularProgress, CssBaseline, Fade } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { checkToken } from '../services/authService';
-import { Route, Redirect } from 'react-router-dom';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Redirect, Route } from 'react-router-dom';
+import { login, logout } from '../actions';
+import { checkToken, logoutUser } from '../services/authService';
 import Dashboard from './dashboard';
+import AppDrawer from './drawer';
 import LoginForm from './loginForm';
-import SignupForm from './signupForm';
 import Messages from './messages';
+import NavBar from './navBar';
 import Profile from './profile';
+import SignupForm from './signupForm';
 
 const styles = (themes) => ({
   root: {
     display: 'flex',
+    alignContent: 'center',
+    justifyContent: 'center',
   },
   centered: {
     position: 'fixed' /* or absolute */,
@@ -36,11 +32,12 @@ class MainLayout extends Component {
     this.state = { loading: true, redirect: false };
   }
 
-  signOut = () => {
+  signOut = async () => {
     // update state
     this.props.logout();
     // clear httponly cookie
-    logoutUser();
+    await logoutUser();
+    console.log('finished clearing');
     this.setState({ loading: true, redirect: true });
   };
 
@@ -53,10 +50,11 @@ class MainLayout extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    if (prevState.redirect != this.state.redirect) {
+    if (prevState.redirect !== this.state.redirect) {
       const loggedIn = await checkToken();
       loggedIn ? this.props.login() : this.props.logout();
       const state = this.state;
+      state.redirect = false;
       state.loading = false;
       this.setState(state);
     }
@@ -102,9 +100,18 @@ class MainLayout extends Component {
               loggedIn={this.props.loggedIn}
               component={LoginForm}
             />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/messages" component={Messages} />
-            <Route path="/profile" component={Profile} />
+
+            <Route path="/dashboard">
+              {this.props.loggedIn ? <Dashboard /> : <Redirect to="/" />}
+            </Route>
+
+            <Route path="/messages">
+              {this.props.loggedIn ? <Messages /> : <Redirect to="/" />}
+            </Route>
+
+            <Route path="/profile">
+              {this.props.loggedIn ? <Profile /> : <Redirect to="/" />}
+            </Route>
           </div>
         )}
       </div>
