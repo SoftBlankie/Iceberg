@@ -16,7 +16,11 @@ import Filter from 'bad-words';
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import * as Yup from 'yup';
-import { signupUser } from '../services/authService.js';
+import {
+  signupUser,
+  checkUniqueUsername,
+  checkUniqueEmail,
+} from '../services/authService.js';
 
 const styles = (theme) => ({
   root: {
@@ -130,7 +134,7 @@ class SignupForm extends Component {
     this.setState(state);
   }
 
-  handleBlur(event, valueName) {
+  async handleBlur(event, valueName) {
     event.persist();
     let state = this.state;
     switch (valueName) {
@@ -141,10 +145,16 @@ class SignupForm extends Component {
           .max(15, 'Username must be 15 characters or less!')
           .required('Username is required!')
           .validate(event.target.value)
-          .then((value) => {
+          .then(async (value) => {
             state.usernameError = '';
             if (this.filter.isProfane(event.target.value)) {
               state.usernameError = 'Keep your username clean.';
+              this.setState(state);
+              return;
+            }
+            const unique = await checkUniqueUsername(event.target.value);
+            if (!unique) {
+              state.usernameError = 'Username is already taken!';
             }
             this.setState(state);
           })
@@ -152,7 +162,6 @@ class SignupForm extends Component {
             state.usernameError = err.message;
             this.setState(state);
           });
-
         break;
       case 'email':
         state.emailTouched = true;
@@ -160,8 +169,12 @@ class SignupForm extends Component {
           .email('Must be a valid email!')
           .required('Email is required!')
           .validate(event.target.value)
-          .then((value) => {
+          .then(async (value) => {
             state.emailError = '';
+            const unique = await checkUniqueEmail(event.target.value);
+            if (!unique) {
+              state.emailError = 'Email is already in use!';
+            }
             this.setState(state);
           })
           .catch((err) => {

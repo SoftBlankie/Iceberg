@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const logger = require('../loaders/winston');
 const config = require('../config');
+
 module.exports = class authService {
   constructor(logger, userModel) {
     this.userModel = userModel;
@@ -13,7 +14,6 @@ module.exports = class authService {
   generateJWTToken(user, expire) {
     const today = new Date();
     const exp = new Date(today);
-    let expireString = '';
     if (expire) {
       exp.setDate(today.getDate() + 1);
     } else {
@@ -40,6 +40,7 @@ module.exports = class authService {
       `Signing up the user ${newUser.username} ${newUser.email}`
     );
 
+    newUser.email = newUser.email.toLowerCase();
     newUser.lowerUsername = newUser.username.toLowerCase();
 
     bcrypt.hash(newUser.password, 12).then((hash) => {
@@ -52,6 +53,32 @@ module.exports = class authService {
         }
         callback(newUser, err);
       });
+    });
+  }
+
+  checkUniqueUsername(username, callback) {
+    let query = username.toLowerCase();
+    this.userModel.find({ lowerUsername: query }, (err, user) => {
+      if (err) {
+        callback(false, err);
+      } else if (!user || user.length !== 0) {
+        callback(false, err);
+      } else {
+        callback(true, err);
+      }
+    });
+  }
+
+  checkUniqueEmail(email, callback) {
+    let query = email.toLowerCase();
+    this.userModel.find({ email: query }, (err, user) => {
+      if (err) {
+        callback(false, err);
+      } else if (!user || user.length !== 0) {
+        callback(false, err);
+      } else {
+        callback(true, err);
+      }
     });
   }
 };

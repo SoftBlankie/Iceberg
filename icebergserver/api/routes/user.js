@@ -5,6 +5,7 @@ const { Container } = require('typedi');
 const auth = require('../middleware/auth');
 const passport = require('passport');
 const jwt = require('express-jwt');
+const logger = require('../../loaders/winston');
 
 module.exports = () => {
   router.get('/status', (req, res) => {
@@ -95,8 +96,6 @@ module.exports = () => {
       });
     }
 
-    // jwt.decode()
-
     return res.json({
       error: '',
     });
@@ -109,6 +108,48 @@ module.exports = () => {
 
   router.get('/user', auth.required, (req, res) => {
     res.send('lmao you did it');
+  });
+
+  router.post('/uniqueUsername', auth.optional, (req, res) => {
+    const authService = Container.get('authService');
+    authService.checkUniqueUsername(req.body.username, (unique, err) => {
+      if (err) {
+        logger.error('Error while checking unique username');
+        logger.error(err);
+        return res.json({
+          error: 'Internal server error',
+        });
+      }
+      if (unique) {
+        return res.json({
+          error: '',
+        });
+      }
+      return res.json({
+        error: 'Not a unique username',
+      });
+    });
+  });
+
+  router.post('/uniqueEmail', auth.optional, (req, res) => {
+    const authService = Container.get('authService');
+    authService.checkUniqueEmail(req.body.email, (unique, err) => {
+      if (err) {
+        logger.error('Error while checking unique email');
+        logger.error(err);
+        return res.json({
+          error: 'Internal server error',
+        });
+      }
+      if (unique) {
+        return res.json({
+          error: '',
+        });
+      }
+      return res.json({
+        error: 'Not a unique email',
+      });
+    });
   });
 
   router.use((error, req, res, next) => {

@@ -41,3 +41,27 @@ export const checkToken = async () => {
       console.log(err);
     });
 };
+
+export const checkUniqueUsername = async (username) => {
+  return axios
+    .post('http://localhost:1337/api/user/uniqueUsername', {
+      username: username,
+    })
+    .then((res) => {
+      return res.data.error === '';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const checkUniqueEmail = async (email) => {
+  return axios
+    .post('http://localhost:1337/api/user/uniqueEmail', { email: email })
+    .then((res) => {
+      return res.data.error === '';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
