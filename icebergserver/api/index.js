@@ -1,10 +1,10 @@
 const express = require('express');
 const user = require('./routes/user');
-const upload = require('./routes/upload');
+const profile = require('./routes/profile');
 const router = express.Router();
 
 module.exports = () => {
   router.use('/user', user());
-  router.use('/upload', upload());
+  router.use('/profile', profile());
   return router;
 };
