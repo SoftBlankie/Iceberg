@@ -10,11 +10,15 @@ const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
 
 module.exports = async (app) => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+
+  // parsing file uploads
+  app.use(fileUpload());
 
   // for parsing cookies
   app.use(cookieParser());
