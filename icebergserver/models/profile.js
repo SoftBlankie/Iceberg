@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const { ObjectID } = require('mongodb');
+const Container = require('typedi');
 
 const Profile = new mongoose.Schema(
   {
     userId: {
-      type: ObjectID,
+      type: Number,
       required: true,
     },
 

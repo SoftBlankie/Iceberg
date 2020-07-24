@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
 const config = require('../config');
-const { Container } = require('typedi');
+const autoIncrement = require('mongoose-auto-increment');
 
 module.exports = async () => {
   const connection = await mongoose.connect(config.databaseURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false,
   });
+
+  autoIncrement.initialize(connection);
 
   return connection;
 };

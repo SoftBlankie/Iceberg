@@ -18,7 +18,7 @@ module.exports = async (expressApp) => {
     model: require('../models/profile'),
   };
 
-  await typediLoader([userModel, profileModel]);
+  await typediLoader([userModel, profileModel], mongoConnection);
   winstonLoader.info('Finished injecting dependencies');
 
   await expressLoader(expressApp);

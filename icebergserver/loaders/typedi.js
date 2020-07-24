@@ -3,11 +3,14 @@ const logger = require('./winston');
 const AuthService = require('../services/authService');
 const ProfileService = require('../services/profileService');
 
-module.exports = async (models) => {
+module.exports = async (models, mongoConnection) => {
   // set mongoose models
   models.forEach((model) => {
     Container.set(model.name, model.model);
   });
+
+  // set mongoose connection
+  Container.set('mongoConnection', mongoConnection);
 
   // set logger
   Container.set('logger', logger);

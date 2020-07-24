@@ -46,12 +46,19 @@ module.exports = class authService {
     bcrypt.hash(newUser.password, 12).then((hash) => {
       newUser.password = hash;
 
-      var newUserObject = new this.userModel(newUser);
+      let newUserObject = new this.userModel(newUser);
       newUserObject.save((err) => {
         if (err) {
-          logger.error(err);
+          this.logger.error(
+            `Error creating new user ${newUser.username} ${newUser.email}`
+          );
+          this.logger.error(err);
+        } else {
+          logger.info(
+            `Successfully signed up the new user ${newUser.username}`
+          );
         }
-        callback(newUser, err);
+        callback(newUser, newUserObject._id, err);
       });
     });
   }

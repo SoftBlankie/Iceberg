@@ -4,7 +4,6 @@ const router = express.Router();
 const { Container } = require('typedi');
 const auth = require('../middleware/auth');
 const passport = require('passport');
-const jwt = require('express-jwt');
 const logger = require('../../loaders/winston');
 
 module.exports = () => {
@@ -22,26 +21,31 @@ module.exports = () => {
     },
   };
 
-  router.post('/signup', auth.optional, (req, res) => {
+  router.post('/signup', auth.optional, celebrate(signupSchema), (req, res) => {
     const logger = Container.get('logger');
 
     const authService = Container.get('authService');
-    authService.signupUser(req.body, (newUser, err) => {
-      if (!err) {
-        logger.info(`Successfully signed up the new user ${newUser.username}`);
+    const profileService = Container.get('profileService');
+
+    authService.signupUser(req.body, (newUser, userId, err) => {
+      if (err) {
+        return res.send({
+          error: 'Did not successfully create new user.',
+        });
+      }
+
+      profileService.createProfile(newUser.username, userId, (err) => {
+        if (err) {
+          return res.send({
+            error: 'Did not successfully create new user.',
+          });
+        }
         return res.send({
           msg: 'Successfully created new user!',
           username: newUser.username,
           error: '',
         });
-      } else {
-        logger.info(
-          `Did not successfully sign up the new user ${newUser.username}`
-        );
-        return res.send({
-          error: 'Did not successfully create new user.',
-        });
-      }
+      });
     });
   });
 
