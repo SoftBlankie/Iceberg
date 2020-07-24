@@ -1,4 +1,5 @@
 const expressLoader = require('./express');
+// load all the loaders
 const winstonLoader = require('./winston');
 const typediLoader = require('./typedi');
 const mongooseLoader = require('./mongoose');
@@ -12,7 +13,12 @@ module.exports = async (expressApp) => {
     model: require('../models/user'),
   };
 
-  await typediLoader([userModel]);
+  const profileModel = {
+    name: 'profileModel',
+    model: require('../models/profile'),
+  };
+
+  await typediLoader([userModel, profileModel]);
   winstonLoader.info('Finished injecting dependencies');
 
   await expressLoader(expressApp);

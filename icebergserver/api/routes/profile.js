@@ -1,10 +1,7 @@
 const express = require('express');
-const { celebrate, Joi } = require('celebrate');
 const router = express.Router();
 const { Container } = require('typedi');
 const auth = require('../middleware/auth');
-const passport = require('passport');
-const fs = require('fs');
 const crypto = require('crypto');
 const mime = require('mime-types');
 
@@ -15,13 +12,12 @@ module.exports = () => {
     res.status(200).end();
   });
 
-  router.put('/upload', (req, res) => {
+  router.put('/upload', auth.required, (req, res) => {
     if (!req.files.file) {
       return res.status(400).end();
     }
-    console.log(req.files);
+
     const file = req.files.file;
-    console.log(typeof req.files.file);
 
     let ext = mime.extension(req.files.file.mimetype);
     let hashLoc = crypto.randomBytes(10).toString('hex') + '.' + ext;

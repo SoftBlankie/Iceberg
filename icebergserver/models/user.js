@@ -21,10 +21,6 @@ const User = new mongoose.Schema(
       unique: true,
     },
 
-    profilePicture: {
-      type: String,
-    },
-
     password: String,
   },
   { timestamps: true }

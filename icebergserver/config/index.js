@@ -1,3 +1,4 @@
+// load config
 const dotenv = require('dotenv');
 const envExists = dotenv.config();
 

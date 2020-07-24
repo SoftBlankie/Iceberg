@@ -1,3 +1,4 @@
+// Create winston logger
 const { winston, loggers, transports, format } = require('winston');
 
 var transportsArray = [

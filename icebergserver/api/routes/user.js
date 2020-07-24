@@ -53,6 +53,7 @@ module.exports = () => {
     },
   };
 
+  // login route
   router.post(
     '/login',
     auth.optional,
@@ -61,34 +62,40 @@ module.exports = () => {
       const logger = Container.get('logger');
       logger.info(`Trying to authenticate the user ${req.body.username}`);
       const authService = Container.get('authService');
+
+      // use passport's local authentication set in loaders/passport
       return passport.authenticate('local', (err, passportUser, info) => {
         if (err) {
           return next(err);
         }
-        if (passportUser) {
-          const user = passportUser;
-          const token = authService.generateJWTToken(user, req.body.expire);
-          res.cookie('token', token, {
-            httpOnly: true,
-            // TODO: for dev purposes only, leave as false to avoid https
-            secure: false,
-            sameSite: 'none',
-          });
+
+        // invalid credentials / user not found
+        if (!passportUser) {
           return res.json({
-            msg: 'Successfully logged in!',
-            username: user.username,
-            error: '',
-            token: token,
+            error: 'Incorrect credentials!',
           });
         }
 
+        // generate response
+        const user = passportUser;
+        const token = authService.generateJWTToken(user, req.body.expire);
+        res.cookie('token', token, {
+          httpOnly: true,
+          // TODO: for dev purposes only, leave secure as false to avoid https
+          secure: false,
+          sameSite: 'none',
+        });
         return res.json({
-          error: 'Incorrect credentials!',
+          msg: 'Successfully logged in!',
+          username: user.username,
+          error: '',
+          token: token,
         });
       })(req, res, next);
     }
   );
 
+  // check whether or not valid token (sent in cookies)
   router.get('/validToken', auth.optional, (req, res) => {
     if (!req.cookies.token) {
       return res.json({
@@ -101,15 +108,14 @@ module.exports = () => {
     });
   });
 
+  // send a clear cookies response
+  // TODO: domain is for development environment
   router.get('/logout', auth.optional, (req, res) => {
     res.clearCookie('token', { path: '/', domain: 'localhost' });
     res.status(200).end();
   });
 
-  router.get('/user', auth.required, (req, res) => {
-    res.send('lmao you did it');
-  });
-
+  // check if unique username
   router.post('/uniqueUsername', auth.optional, (req, res) => {
     const authService = Container.get('authService');
     authService.checkUniqueUsername(req.body.username, (unique, err) => {
@@ -120,17 +126,18 @@ module.exports = () => {
           error: 'Internal server error',
         });
       }
-      if (unique) {
+      if (!unique) {
         return res.json({
-          error: '',
+          error: 'Not a unique username',
         });
       }
       return res.json({
-        error: 'Not a unique username',
+        error: '',
       });
     });
   });
 
+  // check if unique email
   router.post('/uniqueEmail', auth.optional, (req, res) => {
     const authService = Container.get('authService');
     authService.checkUniqueEmail(req.body.email, (unique, err) => {
@@ -141,21 +148,23 @@ module.exports = () => {
           error: 'Internal server error',
         });
       }
-      if (unique) {
+      if (!unique) {
         return res.json({
-          error: '',
+          error: 'Not a unique email',
         });
       }
       return res.json({
-        error: 'Not a unique email',
+        error: '',
       });
     });
   });
 
+  // catch errors
   router.use((error, req, res, next) => {
     const logger = Container.get('logger');
 
     logger.error(error);
+
     // joi error
     if (error.joi) {
       // return code 400 (bad request)

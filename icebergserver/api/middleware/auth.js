@@ -1,3 +1,4 @@
+// auth middleware
 const jwt = require('express-jwt');
 const config = require('../../config');
 

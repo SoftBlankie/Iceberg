@@ -42,7 +42,7 @@ module.exports = class authService {
 
     newUser.email = newUser.email.toLowerCase();
     newUser.lowerUsername = newUser.username.toLowerCase();
-
+    newUser.profilePicture = '/public/profilePics/default-profile.png';
     bcrypt.hash(newUser.password, 12).then((hash) => {
       newUser.password = hash;
 

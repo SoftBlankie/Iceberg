@@ -1,7 +1,6 @@
 const express = require('express');
 
 const config = require('./config');
-const { winston } = require('winston');
 const { Container } = require('typedi');
 
 async function startServer() {
@@ -13,7 +12,9 @@ async function startServer() {
 
   app.listen(config.port, (err) => {
     if (err) {
-      logger.error('We have an issue, server did not launch successfully');
+      logger.error(
+        'Houston, we have an issue, server did not launch successfully'
+      );
       return;
     }
 

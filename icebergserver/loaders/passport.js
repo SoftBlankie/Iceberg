@@ -1,35 +1,36 @@
-const mongoose = require('mongoose');
-const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const bcrypt = require('bcrypt');
 const { Container } = require('typedi');
-const { Logger } = require('mongodb');
 
 module.exports = (passport) => {
+  // get user model from container
   var userModel = Container.get('userModel');
   const logger = Container.get('logger');
+
+  // set new local strategy for authentication
   passport.use(
     new LocalStrategy((username, password, done) => {
       userModel
         .findOne({ lowerUsername: username.toLowerCase() })
         .then((user) => {
-          if (user) {
-            bcrypt.compare(password, user.password).then((res) => {
-              if (!res) {
-                logger.info(`Password for ${username} not matching`);
-                return done(null, false, {
-                  error: { password: 'is invalid' },
-                });
-              }
-              logger.info('Successfully authenticated user');
-              return done(null, user);
-            });
-          } else {
+          // attempt to find a user based on lowercase username query
+          if (!user) {
             logger.info(`Username ${username} is not found`);
             return done(null, false, {
               error: { username: 'is invalid' },
             });
           }
+
+          bcrypt.compare(password, user.password).then((res) => {
+            if (!res) {
+              logger.info(`Password for ${username} not matching`);
+              return done(null, false, {
+                error: { password: 'is invalid' },
+              });
+            }
+            logger.info('Successfully authenticated user');
+            return done(null, user);
+          });
         })
         .catch(done);
     })
