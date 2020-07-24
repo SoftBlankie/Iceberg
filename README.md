@@ -39,7 +39,6 @@ Meet new people by discussing interesting questions and hit them up with private
 
 - [ ] Implement model for user profile (nickname, first name, bio, etc)
 - [ ] (Webapp) Display profile and allow users to edit profile
-- [ ] (Webapp) Upload profile picture
 
 ## Finished
 
@@ -52,6 +51,7 @@ Meet new people by discussing interesting questions and hit them up with private
 - [x] Implement authorization for Android App via retrofit requests
 - [x] (Webapp) Implement the sign up form and login form
 - [x] (Webapp) Implement the authentication service
+- [X] (Webapp) Upload profile picture
 
 # Want to Contribute?
 
