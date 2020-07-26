@@ -15,6 +15,7 @@ export const signupUser = (newUser) => {
 };
 
 export const loginUser = async (user) => {
+  console.log(process.env.REACT_APP_API_URL);
   return axios
     .post(API_URL+'/user/login', user, {
       withCredentials: true,
