@@ -14,9 +14,7 @@ module.exports = () => {
   var signupSchema = {
     body: {
       username: Joi.string().min(3).max(16).required(),
-      email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-        .required(),
+      email: Joi.string().email({ minDomainSegments: 2 }).required(),
       password: Joi.string().min(6).max(100).required(),
     },
   };
