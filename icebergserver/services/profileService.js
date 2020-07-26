@@ -61,9 +61,7 @@ module.exports = class profileService {
         );
         this.logger.error(err);
       } else {
-        this.logger.info(
-          `Successfully created a new profile ${newUser.username}`
-        );
+        this.logger.info(`Successfully created a new profile ${username}`);
       }
       callback(err);
     });
@@ -93,7 +91,7 @@ module.exports = class profileService {
         // invalid
         if (err2) {
           this.logger.error(err2);
-          return callback(err);
+          return callback(err2);
         }
 
         // update profilePicture field
@@ -109,7 +107,7 @@ module.exports = class profileService {
                 `Finished updating profilePicture field ${dest} for ${userId}`
               );
             }
-            return callback(err);
+            return callback(err3);
           }
         );
       });
