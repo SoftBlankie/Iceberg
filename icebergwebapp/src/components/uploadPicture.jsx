@@ -15,7 +15,7 @@ const styles = (theme) => ({
     display: 'none',
   },
   cropPopup: {
-    position: 'absolute',
+    position: 'fixed',
     left: '0%',
     top: '0%',
     width: '100%',
@@ -29,7 +29,7 @@ const styles = (theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
     width: '60%',
-    top: '20%',
+    top: '10%',
     left: '0',
     right: '0',
     marginLeft: 'auto',
@@ -37,7 +37,7 @@ const styles = (theme) => ({
     textAlign: 'center',
     padding: '50px',
     backgroundColor: theme.palette.background.paper,
-    position: 'absolute',
+    position: 'fixed',
   },
   reactCrop: {
     marginBottom: '30px',
@@ -105,8 +105,8 @@ class UploadPicture extends Component {
 
     const reader = new FileReader();
     canvas.toBlob((blob) => {
-      fd.set('a', blob, 'cropped_' + this.state.fileSrc);
       const fd = new FormData();
+      fd.set('a', blob, 'cropped_' + this.state.fileSrc);
       this.setState({ croppedFile: fd.get('a') });
       console.log(this.state.croppedFile);
     });

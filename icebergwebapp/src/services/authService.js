@@ -3,15 +3,16 @@ import axios from 'axios';
 export const signupUser = (newUser) => {
   // newUser is supposed to be validated already
   return axios
-    .post('http://localhost:1337/api/user/signup', newUser)
+    .post(process.env.REACT_APP_API_URL + '/user/signup', newUser)
     .then((res) => {
       return res.data.error === '';
     });
 };
 
 export const loginUser = async (user) => {
+  console.log(process.env.REACT_APP_API_URL);
   return axios
-    .post('http://localhost:1337/api/user/login', user, {
+    .post(process.env.REACT_APP_API_URL + '/user/login', user, {
       withCredentials: true,
     })
     .then((res) => {
@@ -21,7 +22,7 @@ export const loginUser = async (user) => {
 
 export const logoutUser = () => {
   return axios
-    .get('http://localhost:1337/api/user/logout', {
+    .get(process.env.REACT_APP_API_URL + '/user/logout', {
       withCredentials: true,
     })
     .then(() => {
@@ -31,7 +32,7 @@ export const logoutUser = () => {
 
 export const checkToken = async () => {
   return axios
-    .get('http://localhost:1337/api/user/validToken', {
+    .get(process.env.REACT_APP_API_URL + '/user/validToken', {
       withCredentials: true,
     })
     .then((res) => {
@@ -44,7 +45,7 @@ export const checkToken = async () => {
 
 export const checkUniqueUsername = async (username) => {
   return axios
-    .post('http://localhost:1337/api/user/uniqueUsername', {
+    .post(process.env.REACT_APP_API_URL + '/user/uniqueUsername', {
       username: username,
     })
     .then((res) => {
@@ -57,7 +58,9 @@ export const checkUniqueUsername = async (username) => {
 
 export const checkUniqueEmail = async (email) => {
   return axios
-    .post('http://localhost:1337/api/user/uniqueEmail', { email: email })
+    .post(process.env.REACT_APP_API_URL + '/user/uniqueEmail', {
+      email: email,
+    })
     .then((res) => {
       return res.data.error === '';
     })

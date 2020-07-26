@@ -20,10 +20,8 @@ const styles = (theme) => ({
   root: {
     display: 'flex',
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
   drawer: {
+    zIndex: 2,
     width: drawerWidth,
     flexShrink: 0,
   },

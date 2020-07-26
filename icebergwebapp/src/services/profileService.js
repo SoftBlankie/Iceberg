@@ -18,7 +18,7 @@ export const uploadFile = (file) => {
   formData.append('file', file);
   console.log(formData);
   axios
-    .put('/api/profile/upload', formData, config)
+    .put(process.env.REACT_APP_API_URL + '/profile/upload', formData, config)
     .then((res) => {
       console.log(res);
     })
