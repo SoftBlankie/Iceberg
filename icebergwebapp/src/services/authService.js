@@ -1,9 +1,14 @@
 import axios from 'axios';
 
+var API_URL = process.env.REACT_APP_DEV_API_URL;
+if (process.env.NODE_ENV === 'production') {
+    API_URL = process.env.REACT_APP_PROD_API_URL;
+}
+
 export const signupUser = (newUser) => {
   // newUser is supposed to be validated already
   return axios
-    .post(process.env.REACT_APP_API_URL + '/user/signup', newUser)
+    .post(API_URL+'/user/signup', newUser)
     .then((res) => {
       return res.data.error === '';
     });
@@ -12,7 +17,7 @@ export const signupUser = (newUser) => {
 export const loginUser = async (user) => {
   console.log(process.env.REACT_APP_API_URL);
   return axios
-    .post(process.env.REACT_APP_API_URL + '/user/login', user, {
+    .post(API_URL+'/user/login', user, {
       withCredentials: true,
     })
     .then((res) => {
@@ -22,7 +27,7 @@ export const loginUser = async (user) => {
 
 export const logoutUser = () => {
   return axios
-    .get(process.env.REACT_APP_API_URL + '/user/logout', {
+    .get(API_URL+'/user/logout', {
       withCredentials: true,
     })
     .then(() => {
@@ -32,7 +37,7 @@ export const logoutUser = () => {
 
 export const checkToken = async () => {
   return axios
-    .get(process.env.REACT_APP_API_URL + '/user/validToken', {
+    .get(API_URL+'/user/validToken', {
       withCredentials: true,
     })
     .then((res) => {
@@ -45,7 +50,7 @@ export const checkToken = async () => {
 
 export const checkUniqueUsername = async (username) => {
   return axios
-    .post(process.env.REACT_APP_API_URL + '/user/uniqueUsername', {
+    .post(API_URL+'/user/uniqueUsername', {
       username: username,
     })
     .then((res) => {
@@ -58,9 +63,7 @@ export const checkUniqueUsername = async (username) => {
 
 export const checkUniqueEmail = async (email) => {
   return axios
-    .post(process.env.REACT_APP_API_URL + '/user/uniqueEmail', {
-      email: email,
-    })
+    .post(API_URL+'/user/uniqueEmail', { email: email })
     .then((res) => {
       return res.data.error === '';
     })
